@@ -1,0 +1,32 @@
+{
+  "name": "voc-to-mqtt",
+  "version": "1.0.0",
+  "description": "uses voc api to push to mqtt",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arins/voc-to-mqtt.git"
+  },
+  "author": "Arin Sinabian",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arins/voc-to-mqtt/issues"
+  },
+  "homepage": "https://github.com/arins/voc-to-mqtt#readme",
+  "dependencies": {
+    "argv-parser": "^0.1.4",
+    "bufferutil": "^3.0.0",
+    "clear": "0.0.1",
+    "gutil": "^1.6.4",
+    "jetty": "0.2.1",
+    "log": "^1.4.0",
+    "mqtt": "^2.5.0",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.0",
+    "utf-8-validate": "^3.0.1",
+    "deep-equal":"1.0.1"
+  }
+}

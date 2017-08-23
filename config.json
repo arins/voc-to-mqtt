@@ -1,0 +1,7 @@
+{
+    
+    "logToFile": true,
+    "logLevel": "INFO",
+    "autoRefresh": true
+   
+}

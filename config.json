@@ -1,7 +1,19 @@
 {
-    
-    "logToFile": true,
+    "logToFile": false,
     "logLevel": "INFO",
-    "autoRefresh": true
-   
+    "autoRefresh": true,
+    "mqtt": {
+        "server": "tcp://yourip",
+        "port": 1883,
+        "username": "yourusername",
+        "password": "yourpassword",
+        "clientId": "yourclientid",
+        "connectTimeout": 30000,
+        "keepalive": 12000,
+        "reconnectPeriod": 1000
+    },
+    "pathToVocApi": "test.bat",
+    "VOCUsername": "yourvocemail@youremail.com",
+    "VOCPassword": "yourvocpassword",
+    "refreshIntervallSeconds": 3600
 }

@@ -1,25 +1,14 @@
-[Wed Aug 23 2017 16:12:14 GMT+0200 (W. Europe Summer Time)] ERROR The system cannot find the path specified.
-
-[Wed Aug 23 2017 16:12:15 GMT+0200 (W. Europe Summer Time)] ERROR mqtt close
-[Wed Aug 23 2017 16:12:16 GMT+0200 (W. Europe Summer Time)] ERROR mqtt reconnect
-[Wed Aug 23 2017 16:12:17 GMT+0200 (W. Europe Summer Time)] ERROR mqtt close
-[Wed Aug 23 2017 16:12:18 GMT+0200 (W. Europe Summer Time)] ERROR The system cannot find the path specified.
-
-[Wed Aug 23 2017 16:12:18 GMT+0200 (W. Europe Summer Time)] ERROR mqtt reconnect
-[Wed Aug 23 2017 16:12:19 GMT+0200 (W. Europe Summer Time)] ERROR mqtt close
-[Wed Aug 23 2017 16:12:20 GMT+0200 (W. Europe Summer Time)] ERROR mqtt reconnect
-[Wed Aug 23 2017 16:12:21 GMT+0200 (W. Europe Summer Time)] ERROR mqtt close
-[Wed Aug 23 2017 16:12:21 GMT+0200 (W. Europe Summer Time)] ERROR The system cannot find the path specified.
-
-[Wed Aug 23 2017 16:12:22 GMT+0200 (W. Europe Summer Time)] ERROR mqtt reconnect
-[Wed Aug 23 2017 16:12:23 GMT+0200 (W. Europe Summer Time)] ERROR mqtt close
-[Wed Aug 23 2017 16:12:24 GMT+0200 (W. Europe Summer Time)] ERROR mqtt reconnect
-[Wed Aug 23 2017 16:12:25 GMT+0200 (W. Europe Summer Time)] ERROR The system cannot find the path specified.
-
-[Wed Aug 23 2017 16:12:25 GMT+0200 (W. Europe Summer Time)] ERROR mqtt close
-[Wed Aug 23 2017 16:12:26 GMT+0200 (W. Europe Summer Time)] ERROR mqtt reconnect
-[Wed Aug 23 2017 16:12:27 GMT+0200 (W. Europe Summer Time)] ERROR mqtt close
-[Wed Aug 23 2017 16:12:28 GMT+0200 (W. Europe Summer Time)] ERROR mqtt reconnect
-[Wed Aug 23 2017 16:12:28 GMT+0200 (W. Europe Summer Time)] ERROR The system cannot find the path specified.
-
-[Wed Aug 23 2017 16:12:29 GMT+0200 (W. Europe Summer Time)] ERROR mqtt close
+[Thu Aug 24 2017 09:30:35 GMT+0200 (W. Europe Summer Time)] INFO mqtt - data changed (nr of items)
+[Thu Aug 24 2017 09:30:35 GMT+0200 (W. Europe Summer Time)] INFO mqtt - publishing data: {"test":"test"}
+[Thu Aug 24 2017 09:30:35 GMT+0200 (W. Europe Summer Time)] INFO mqtt - publish on topic - voc-to-mqtt/data "{\"test\":\"test\"}"
+[Thu Aug 24 2017 09:30:36 GMT+0200 (W. Europe Summer Time)] ERROR mqtt close
+[Thu Aug 24 2017 09:30:37 GMT+0200 (W. Europe Summer Time)] ERROR mqtt reconnect
+[Thu Aug 24 2017 09:30:38 GMT+0200 (W. Europe Summer Time)] ERROR mqtt close
+[Thu Aug 24 2017 09:30:39 GMT+0200 (W. Europe Summer Time)] ERROR mqtt reconnect
+[Thu Aug 24 2017 09:30:40 GMT+0200 (W. Europe Summer Time)] ERROR mqtt close
+[Thu Aug 24 2017 09:30:41 GMT+0200 (W. Europe Summer Time)] ERROR mqtt reconnect
+[Thu Aug 24 2017 09:30:42 GMT+0200 (W. Europe Summer Time)] ERROR mqtt close
+[Thu Aug 24 2017 09:30:43 GMT+0200 (W. Europe Summer Time)] ERROR mqtt reconnect
+[Thu Aug 24 2017 09:30:44 GMT+0200 (W. Europe Summer Time)] ERROR mqtt close
+[Thu Aug 24 2017 09:30:45 GMT+0200 (W. Europe Summer Time)] ERROR mqtt reconnect
+[Thu Aug 24 2017 09:30:46 GMT+0200 (W. Europe Summer Time)] ERROR mqtt close

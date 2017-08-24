@@ -12,7 +12,7 @@ function EventPublisher(MqttHandler) {
         self.currentData = data;
     };
     self.hasCurrentData = function () {
-        return !!self.currentData[key];
+        return !!self.currentData;
     };
     self.getCurrentData = function () {
         return self.currentData;
@@ -55,9 +55,11 @@ function EventPublisher(MqttHandler) {
             if (self.dataChanged(data)) {
                 self.saveCurrentData(data)
 
-                logger.info('mqtt - publishing data: ' + JSON.stringify(list));
+                logger.info('mqtt - publishing data: ' + JSON.stringify(data));
                 MqttHandler.publish(JSON.stringify(data));
             }
+            return self.getCurrentData();
+            
         });
     }
 

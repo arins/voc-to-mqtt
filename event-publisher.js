@@ -61,14 +61,16 @@ function EventPublisher(MqttHandler) {
                 MqttHandler.publish('fuelAmount', data.fuelAmount);
                 MqttHandler.publish('fuelAmountLevel', data.fuelAmountLevel);
                 MqttHandler.publish('fuelTankVolume', data.fuelTankVolume);
+                MqttHandler.publish('fuelType', data.fuelType);
                 MqttHandler.publish('registrationNumber', data.registrationNumber);
                 MqttHandler.publish('subscriptionEndDate', data.subscriptionEndDate);
                 MqttHandler.publish('vehicleType', data.vehicleType);
                 MqttHandler.publish('washerFluidLevel', data.washerFluidLevel);
                 MqttHandler.publish('carLocked', data.carLocked);
-                MqttHandler.publish('distanceToEmpty', data.distanceToEmpty);
+                MqttHandler.publish('engineRunning', data.engineRunning);
 
-                if (data.calculatedPosition.longitude) {
+
+                if (data.calculatedPosition && data.calculatedPosition.longitude) {
                     MqttHandler.publish('calculatedPosition/location',
                         {
                             lat: data.calculatedPosition.longitude,
@@ -78,24 +80,39 @@ function EventPublisher(MqttHandler) {
                 MqttHandler.publish('calculatedPosition/speed', data.calculatedPosition.speed);
                 MqttHandler.publish('calculatedPosition/heading', data.calculatedPosition.heading);
 
+                if (data.doors) {
+                    MqttHandler.publish('doors/tailgateOpen', data.doors.tailgateOpen);
+                    MqttHandler.publish('doors/rearRightDoorOpen', data.doors.rearRightDoorOpen);
+                    MqttHandler.publish('doors/rearLeftDoorOpen', data.doors.rearLeftDoorOpen);
+                    MqttHandler.publish('doors/frontRightDoorOpen', data.doors.frontRightDoorOpen);
+                    MqttHandler.publish('doors/hoodOpen', data.doors.hoodOpen);
+                    MqttHandler.publish('doors/frontLeftDoorOpen', data.doors.frontLeftDoorOpen);
+                }
+                if (data.position) {
+                    if (data.position.longitude) {
+                        MqttHandler.publish('position',
+                            {
+                                long: data.position.longitude,
+                                lat: data.position.latitude
+                            });
+                    }
+                    MqttHandler.publish('position/speed', data.position.speed);
+                    MqttHandler.publish('position/heading', data.position.heading);
+                }
 
-                MqttHandler.publish('doors/tailgateOpen', data.doors.tailgateOpen);
-                MqttHandler.publish('doors/rearRightDoorOpen', data.doors.rearRightDoorOpen);
-                MqttHandler.publish('doors/rearLeftDoorOpen', data.doors.rearLeftDoorOpen);
-                MqttHandler.publish('doors/frontRightDoorOpen', data.doors.frontRightDoorOpen);
-                MqttHandler.publish('doors/hoodOpen', data.doors.hoodOpen);
-                MqttHandler.publish('doors/frontLeftDoorOpen', data.doors.frontLeftDoorOpen);
+                if(data.tyrePressure){
+                    MqttHandler.publish('tyrePressure/frontLeftTyrePressure', data.tyrePressure.frontLeftTyrePressure);
+                    MqttHandler.publish('tyrePressure/frontRightTyrePressure', data.tyrePressure.frontRightTyrePressure);
+                    MqttHandler.publish('tyrePressure/rearLeftTyrePressure', data.tyrePressure.rearLeftTyrePressure);
+                    MqttHandler.publish('tyrePressure/rearRightTyrePressure', data.tyrePressure.rearRightTyrePressure);
+                }
 
-                MqttHandler.publish('position',
-                    {
-                        long: data.position.longitude,
-                        lat: data.position.latitude
-                    });
-                MqttHandler.publish('position/speed', data.position.speed);
-                MqttHandler.publish('position/heading', data.position.heading);
-
-
-
+                if(data.windows){
+                    MqttHandler.publish('windows/frontLeftWindowOpen', data.windows.frontLeftWindowOpen);
+                    MqttHandler.publish('windows/rearLeftWindowOpen', data.windows.rearLeftWindowOpen);
+                    MqttHandler.publish('windows/rearRightWindowOpen', data.windows.rearRightWindowOpen);
+                    MqttHandler.publish('windows/frontRightWindowOpen', data.windows.frontRightWindowOpen);
+                }
 
 
                 // more stuff here

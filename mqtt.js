@@ -25,16 +25,6 @@ function MqttHandler() {
         });
         this.client.on('close', () => {
             logger.error('mqtt close');
-            // self.client = Mqtt.connect(paramters.mqtt.server, {
-            //     clientId: paramters.mqtt.clientId,
-            //     connectTimeout: paramters.mqtt.connectTimeout,
-            //     keepalive: paramters.mqtt.keepalive,
-            //     password: paramters.mqtt.password,
-            //     username: paramters.mqtt.username,
-            //     reconnectPeriod: paramters.mqtt.reconnectPeriod,
-            //     port: paramters.mqtt.port
-
-            // });
         });
         this.client.on('reconnect', () => {
             logger.error('mqtt reconnect');

@@ -26,7 +26,7 @@ function EventPublisher(MqttHandler) {
         const currentData = self.getCurrentData();
 
         if (!equal(currentData, newData)) {
-            logger.info('mqtt - data changed (nr of items)');
+            logger.info('mqtt - data changed');
             return true;
         }
         return false;
@@ -50,19 +50,64 @@ function EventPublisher(MqttHandler) {
     }
 
     this.publishNewData = function () {
-       
+
         return self.getDataFromVocExec().then((data) => {
             if (self.dataChanged(data)) {
-                self.saveCurrentData(data)
+                self.saveCurrentData(data);
+                MqttHandler.publish('averageFuelConsumption', data.averageFuelConsumption);
+                MqttHandler.publish('averageSpeed', data.averageSpeed);
+                MqttHandler.publish('brakeFluid', data.brakeFluid);
+                MqttHandler.publish('distanceToEmpty', data.distanceToEmpty);
+                MqttHandler.publish('fuelAmount', data.fuelAmount);
+                MqttHandler.publish('fuelAmountLevel', data.fuelAmountLevel);
+                MqttHandler.publish('fuelTankVolume', data.fuelTankVolume);
+                MqttHandler.publish('registrationNumber', data.registrationNumber);
+                MqttHandler.publish('subscriptionEndDate', data.subscriptionEndDate);
+                MqttHandler.publish('vehicleType', data.vehicleType);
+                MqttHandler.publish('washerFluidLevel', data.washerFluidLevel);
+                MqttHandler.publish('carLocked', data.carLocked);
+                MqttHandler.publish('distanceToEmpty', data.distanceToEmpty);
 
-                logger.info('mqtt - publishing data: ' + JSON.stringify(data));
-                MqttHandler.publish(JSON.stringify(data));
+                if (data.calculatedPosition.longitude) {
+                    MqttHandler.publish('calculatedPosition/location',
+                        {
+                            lat: data.calculatedPosition.longitude,
+                            long: data.calculatedPosition.latitude
+                        });
+                }
+                MqttHandler.publish('calculatedPosition/speed', data.calculatedPosition.speed);
+                MqttHandler.publish('calculatedPosition/heading', data.calculatedPosition.heading);
+
+
+                MqttHandler.publish('doors/tailgateOpen', data.doors.tailgateOpen);
+                MqttHandler.publish('doors/rearRightDoorOpen', data.doors.rearRightDoorOpen);
+                MqttHandler.publish('doors/rearLeftDoorOpen', data.doors.rearLeftDoorOpen);
+                MqttHandler.publish('doors/frontRightDoorOpen', data.doors.frontRightDoorOpen);
+                MqttHandler.publish('doors/hoodOpen', data.doors.hoodOpen);
+                MqttHandler.publish('doors/frontLeftDoorOpen', data.doors.frontLeftDoorOpen);
+
+                MqttHandler.publish('position',
+                    {
+                        long: data.position.longitude,
+                        lat: data.position.latitude
+                    });
+                MqttHandler.publish('position/speed', data.position.speed);
+                MqttHandler.publish('position/heading', data.position.heading);
+
+
+
+
+
+                // more stuff here
+
+
+
+
             }
             return self.getCurrentData();
-            
-        });
-    }
 
+        });
+    };
 }
 
 module.exports = {

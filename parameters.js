@@ -19,6 +19,10 @@ function parse(argv) {
                 type: String,
                 value: 'config.json'
             },
+            convertToOpenHab: {
+                type: Boolean,
+                value: true
+            }
             
         }
     });

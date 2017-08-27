@@ -73,8 +73,8 @@ function EventPublisher(MqttHandler) {
                 if (data.calculatedPosition && data.calculatedPosition.longitude) {
                     MqttHandler.publish('calculatedPosition/location',
                         {
-                            lat: data.calculatedPosition.longitude,
-                            long: data.calculatedPosition.latitude
+                            longitude: data.calculatedPosition.longitude,
+                            latitude: data.calculatedPosition.latitude
                         });
                 }
                 MqttHandler.publish('calculatedPosition/speed', data.calculatedPosition.speed);
@@ -92,8 +92,8 @@ function EventPublisher(MqttHandler) {
                     if (data.position.longitude) {
                         MqttHandler.publish('position',
                             {
-                                long: data.position.longitude,
-                                lat: data.position.latitude
+                                longitude: data.position.longitude,
+                                latitude: data.position.latitude
                             });
                     }
                     MqttHandler.publish('position/speed', data.position.speed);

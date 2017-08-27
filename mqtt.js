@@ -75,7 +75,9 @@ function MqttHandler() {
     this.subscribeToHeatEvent = function(){
         self.client.subscribe('voc-to-mqtt/data/heat');
     };
-
+    this.subscribeToRefreshEvent = function (){
+        self.client.subscribe('voc-to-mqtt/data/refresh');
+    };
 
 }
 

@@ -185,6 +185,16 @@ function EventPublisher(MqttHandler) {
         });
     };
 
+    this.setUpRefreshEvent = function() {
+        MqttHandler.subscribeToRefreshEvent();
+        MqttHandler.client.on('message', function (t, message) {
+            if(t === 'voc-to-mqtt/data/refresh'){
+                logger.info('refresh!');
+                self.publishNewData();
+            }
+        });
+    };
+
     this.publishNewData = function () {
 
         return self.getDataFromVocExec().then((data) => {

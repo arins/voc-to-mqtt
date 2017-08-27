@@ -69,7 +69,12 @@ function MqttHandler() {
             logger.error(e);
         }
     };
-
+    this.subscribeToLockEvent = function(){
+        self.client.subscribe('voc-to-mqtt/data/carLock');
+    };
+    this.subscribeToHeatEvent = function(){
+        self.client.subscribe('voc-to-mqtt/data/heat');
+    };
 
 
 }

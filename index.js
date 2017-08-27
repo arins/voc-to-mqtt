@@ -15,3 +15,9 @@ let EventPublisher = require('./event-publisher').EventPublushier;
 
 })();
 
+(function(){
+
+    EventPublisher.setUpLockingEvent();
+    EventPublisher.setUpHeaterEvent();
+
+})();

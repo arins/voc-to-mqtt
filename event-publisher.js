@@ -44,10 +44,146 @@ function EventPublisher(MqttHandler) {
                 }
             });
         });
+    };
+
+    this.lockingOrUnlocking = false;
+    this.setUpLockingEvent = function () {
+        MqttHandler.subscribeToLockEvent();
+        MqttHandler.client.on('message', function (t, message) {
+            if(t !== 'voc-to-mqtt/data/carLock'){
+                return;
+            }
+            if (self.lockingOrUnlocking) {
+                return;
+            }
+            
+            if (message.toString() === 'ON' || message === true || message.toString() === 'true') {
+                self.lockingOrUnlocking = true;    
+                logger.info('lock!')
+                self.lock().then(() => {
+                    self.publishNewData();
+                    logger.info('lock ok!');
+                    self.lockingOrUnlocking = false;
+                }, () => {
+                    self.publishNewData();
+                    logger.error('lock fail!');
+                    self.lockingOrUnlocking = false;
+                });
+            }
+            if (message.toString() === 'OFF' || message === false || message.toString() === 'false') {
+                self.lockingOrUnlocking = true;    
+                logger.info('unlock!')
+                self.unlock().then(() => {
+                    self.publishNewData();
+                    logger.info('unlock ok!')
+                    self.lockingOrUnlocking = false;
+                }, () => {
+                    self.publishNewData();
+                    logger.error('unlock fail!');
+                    self.lockingOrUnlocking = false;
+                });
+            }
+        });
+    };
+
+    this.lock = function () {
+        return new Promise(function (fulfill, reject) {
+            const toExec = paramters.pathToVocApi + ' -g  -u ' + paramters.VOCUsername + ' -p ' + paramters.VOCPassword + ' lock'
+            exec(toExec, function callback(error, stdout, stderr) {
+                if (stderr) {
+                    logger.error(stderr);
+                    reject(stderr);
+                } else {
+                    fulfill();
+                }
+            });
+        });
+    };
+
+    this.unlock = function () {
+        return new Promise(function (fulfill, reject) {
+            const toExec = paramters.pathToVocApi + ' -g  -u ' + paramters.VOCUsername + ' -p ' + paramters.VOCPassword + ' unlock'
+            exec(toExec, function callback(error, stdout, stderr) {
+                if (stderr) {
+                    logger.error(stderr);
+                    reject(stderr);
+                } else {
+                    fulfill();
+                }
+            });
+        });
+    };
+
+    this.puttingHeatOnOrOff = false;
+    this.setUpHeaterEvent = function () {
+        MqttHandler.subscribeToHeatEvent();
+        MqttHandler.client.on('message', function (t, message) {
+            if(t !== 'voc-to-mqtt/data/heat'){
+                return;
+            }
+            if (self.puttingHeatOnOrOff) {
+                return;
+            }
+            
+            if (message.toString() === 'ON' || message === true || message.toString() === 'true') {
+                self.puttingHeatOnOrOff = true;    
+                logger.info('heat on!')
+                self.heaterOn().then(() => {
+                    self.publishNewData();
+                    logger.info('heat on ok!');
+                    self.puttingHeatOnOrOff = false;
+                }, () => {
+                    self.publishNewData();
+                    logger.error('heater on fail!');
+                    self.puttingHeatOnOrOff = false;
+                });
+            }
+            if (message.toString() === 'OFF' || message === false || message.toString() === 'false') {
+                self.puttingHeatOnOrOff = true;    
+                logger.info('heater off!')
+                self.heaterOff().then(() => {
+                    self.publishNewData();
+                    logger.info('heater off ok!')
+                    self.puttingHeatOnOrOff = false;
+                }, () => {
+                    self.publishNewData();
+                    logger.error('heater off fail!');
+                    self.puttingHeatOnOrOff = false;
+                });
+            }
+        });
+    };
 
 
+     this.heaterOn = function () {
+        return new Promise(function (fulfill, reject) {
+            const toExec = paramters.pathToVocApi + ' -g  -u ' + paramters.VOCUsername + ' -p ' + paramters.VOCPassword + ' heater start'
+            exec(toExec, function callback(error, stdout, stderr) {
+                if (stderr) {
+                    logger.error(stderr);
+                    reject(stderr);
+                } else {
+                    fulfill();
+                }
+            });
+            
+        });
+    };
 
-    }
+    this.heaterOff = function () {
+        return new Promise(function (fulfill, reject) {
+            const toExec = paramters.pathToVocApi + ' -g  -u ' + paramters.VOCUsername + ' -p ' + paramters.VOCPassword + ' heater stop'
+            exec(toExec, function callback(error, stdout, stderr) {
+                if (stderr) {
+                    logger.error(stderr);
+                    reject(stderr);
+                } else {
+                    fulfill();
+                }
+            });
+            fulfill();
+        });
+    };
 
     this.publishNewData = function () {
 
@@ -100,14 +236,14 @@ function EventPublisher(MqttHandler) {
                     MqttHandler.publish('position/heading', data.position.heading);
                 }
 
-                if(data.tyrePressure){
+                if (data.tyrePressure) {
                     MqttHandler.publish('tyrePressure/frontLeftTyrePressure', data.tyrePressure.frontLeftTyrePressure);
                     MqttHandler.publish('tyrePressure/frontRightTyrePressure', data.tyrePressure.frontRightTyrePressure);
                     MqttHandler.publish('tyrePressure/rearLeftTyrePressure', data.tyrePressure.rearLeftTyrePressure);
                     MqttHandler.publish('tyrePressure/rearRightTyrePressure', data.tyrePressure.rearRightTyrePressure);
                 }
 
-                if(data.windows){
+                if (data.windows) {
                     MqttHandler.publish('windows/frontLeftWindowOpen', data.windows.frontLeftWindowOpen);
                     MqttHandler.publish('windows/rearLeftWindowOpen', data.windows.rearLeftWindowOpen);
                     MqttHandler.publish('windows/rearRightWindowOpen', data.windows.rearRightWindowOpen);

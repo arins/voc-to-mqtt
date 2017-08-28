@@ -68,7 +68,7 @@ function EventPublisher(MqttHandler) {
             }
             else{
                 self.waitedForLock = self.waitedForLock + 2000;
-                setTimeout(function(){ self.washerFluidLevel(); }, 2000);
+                setTimeout(function(){ self.waitForLockToComplete(); }, 2000);
             }
         });
         

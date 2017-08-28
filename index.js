@@ -5,11 +5,11 @@ let EventPublisher = require('./event-publisher').EventPublushier;
     EventPublisher.publishNewData().then(() => {
         setTimeout(() => {
             return refresh();
-        }, paramters.refreshIntervallSeconds);
+        }, paramters.refreshIntervallSeconds * 1000);
     }, () => {
         setTimeout(() => {
             return refresh();
-        }, paramters.refreshIntervallSeconds);
+        }, paramters.refreshIntervallSeconds* 1000);
     });
 
 

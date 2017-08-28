@@ -16,7 +16,7 @@ let EventPublisher = require('./event-publisher').EventPublushier;
 })();
 
 (function(){
-
+    EventPublisher.resetLockingStatus();
     EventPublisher.setUpLockingEvent();
     EventPublisher.setUpHeaterEvent();
     EventPublisher.setUpRefreshEvent();

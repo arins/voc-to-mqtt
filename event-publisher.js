@@ -46,6 +46,33 @@ function EventPublisher(MqttHandler) {
         });
     };
 
+    this.resetLockingStatus = function() {
+        MqttHandler.client.publish('voc-to-mqtt/data/lockChangeStatus', 'OFF');
+    };
+    this.timeoutForWait = 20000;
+    this.waitedForLock = 0;
+    this.waitForLockToComplete = function(){
+        self.getDataFromVocExec().then((data) => {
+            self.saveCurrentData(data);
+            if(data.carLocked){
+                self.waitedForLockwaited = 0;
+                self.lockingOrUnlocking = false;
+                MqttHandler.client.publish('voc-to-mqtt/data/lockChangeStatus', 'OFF');    
+                this.publishNewData();
+            }
+            else if(self.timeoutForWait < self.waitedForLock){
+                self.lockingOrUnlocking = false;
+                MqttHandler.client.publish('voc-to-mqtt/data/lockChangeStatus', 'OFF');    
+                this.publishNewData();
+                
+            }
+            else{
+                self.waitedForLock = self.waitedForLock + 2000;
+                setTimeout(function(){ self.washerFluidLevel(); }, 2000);
+            }
+        });
+        
+    };
     this.lockingOrUnlocking = false;
     this.setUpLockingEvent = function () {
         MqttHandler.subscribeToLockEvent();
@@ -58,29 +85,40 @@ function EventPublisher(MqttHandler) {
             }
             
             if (message.toString() === 'ON' || message === true || message.toString() === 'true') {
-                self.lockingOrUnlocking = true;    
+                self.lockingOrUnlocking = true;  
+                MqttHandler.client.publish('voc-to-mqtt/data/lockChangeStatus', 'ON');
                 logger.info('lock!')
                 self.lock().then(() => {
-                    self.publishNewData();
                     logger.info('lock ok!');
-                    self.lockingOrUnlocking = false;
+                    return self.publishNewData();
                 }, () => {
-                    self.publishNewData();
                     logger.error('lock fail!');
-                    self.lockingOrUnlocking = false;
+                    return self.publishNewData();
+                }).then(()=>{
+                    
+                    return self.waitForLockToComplete();
+                }, ()=>{
+                    
+                    return self.waitForLockToComplete();
+                    
                 });
             }
             if (message.toString() === 'OFF' || message === false || message.toString() === 'false') {
                 self.lockingOrUnlocking = true;    
+                MqttHandler.client.publish('voc-to-mqtt/data/lockChangeStatus', 'ON');
                 logger.info('unlock!')
                 self.unlock().then(() => {
-                    self.publishNewData();
-                    logger.info('unlock ok!')
-                    self.lockingOrUnlocking = false;
+                    logger.info('unlock ok!');
+                    return self.publishNewData();
                 }, () => {
-                    self.publishNewData();
                     logger.error('unlock fail!');
-                    self.lockingOrUnlocking = false;
+                    return self.publishNewData();
+                    
+                    
+                }).then(()=>{
+                    return self.waitForLockToComplete();
+                }, ()=>{
+                    return self.waitForLockToComplete();
                 });
             }
         });
@@ -126,7 +164,7 @@ function EventPublisher(MqttHandler) {
             }
             
             if (message.toString() === 'ON' || message === true || message.toString() === 'true') {
-                self.puttingHeatOnOrOff = true;    
+                self.puttingHeatOnOrOff = true;
                 logger.info('heat on!')
                 self.heaterOn().then(() => {
                     self.publishNewData();

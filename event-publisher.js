@@ -56,7 +56,7 @@ function EventPublisher(MqttHandler) {
             self.saveCurrentData(data);
             logger.info('waiting for ' + (lock ? 'lock' : 'unlock') + ' to complete currently: ' + data.carLocked)
             if(data.carLocked === lock){
-                self.waitedForLockwaited = 0;
+                self.waitedForLock = 0;
                 self.lockingOrUnlocking = false;
                 logger.info((lock ? 'lock' : 'unlock') + ' done!');
                 MqttHandler.client.publish('voc-to-mqtt/data/lockChangeStatus', 'OFF');    
@@ -71,7 +71,6 @@ function EventPublisher(MqttHandler) {
             else{
                 self.waitedForLock = self.waitedForLock + 10000;
                 logger.info((lock ? 'lock' : 'unlock') + ' checking again! waited ' + self.waitedForLock);
-                self.waitedForLock = self.waitedForLock + 10000;
                 setTimeout(function(){ self.waitForLockToComplete(lock); }, 10000);
             }
         });
@@ -170,27 +169,59 @@ function EventPublisher(MqttHandler) {
                 self.puttingHeatOnOrOff = true;
                 logger.info('heat on!')
                 self.heaterOn().then(() => {
-                    self.publishNewData();
-                    logger.info('heat on ok!');
                     self.puttingHeatOnOrOff = false;
+                    return self.publishNewData();
+                    
+                    
                 }, () => {
-                    self.publishNewData();
                     logger.error('heater on fail!');
-                    self.puttingHeatOnOrOff = false;
+                    return self.publishNewData();
+                }).then(()=>{
+                    return self.waitForHeaterToComplete(true);
+                }, ()=>{
+                    return self.waitForHeaterToComplete(true);
                 });
             }
             if (message.toString() === 'OFF' || message === false || message.toString() === 'false') {
                 self.puttingHeatOnOrOff = true;    
                 logger.info('heater off!')
                 self.heaterOff().then(() => {
-                    self.publishNewData();
-                    logger.info('heater off ok!')
-                    self.puttingHeatOnOrOff = false;
+                    return self.publishNewData();
                 }, () => {
-                    self.publishNewData();
                     logger.error('heater off fail!');
-                    self.puttingHeatOnOrOff = false;
+                    return self.publishNewData();
+                }).then(()=>{
+                    return self.waitForHeaterToComplete(true);
+                }, ()=>{
+                    return self.waitForHeaterToComplete(true);
                 });
+            }
+        });
+    };
+    this.waitedForheaterToChangeTime = 0;
+    this.heaterTimeoutForWait = 3 * 60 * 1000;
+    this.waitForHeaterToComplete = function(heaterOn){
+        self.getDataFromVocExec().then((data) => {
+            self.saveCurrentData(data);
+            logger.info('waiting for heater ' + (heaterOn ? 'to start' : 'to shutdown') + ' to complete currently: ' + data.heater.status === 'on')
+            if(data.heater.status === (heaterOn ? 'on' : 'off')){
+                self.waitedForheaterToChangeTime = 0;
+                self.puttingHeatOnOrOff = false;
+                logger.info((heaterOn ? 'start' : 'to shutdown') + ' done!');
+                MqttHandler.client.publish('voc-to-mqtt/data/heaterStatus', 'OFF');    
+                this.publishNewData();
+            }
+            else if(self.heaterTimeoutForWait < self.waitedForheaterToChangeTime){
+                logger.info('heater ' + (heaterOn ? 'to start' : 'to shutdown') + ' timed out');
+                self.puttingHeatOnOrOff = false;
+                MqttHandler.client.publish('voc-to-mqtt/data/heaterStatus', 'OFF');    
+                this.publishNewData();
+            }
+            else{
+                self.waitedForheaterToChangeTime = self.waitedForheaterToChangeTime + 10000;
+                logger.info('heater ' + (heaterOn ? 'to start' : 'to shutdown') + ' checking again! waited ' + self.waitedForheaterToChangeTime);
+
+                setTimeout(function(){ self.waitForHeaterToComplete(heaterOn); }, 10000);
             }
         });
     };

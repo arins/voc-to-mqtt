@@ -49,29 +49,32 @@ function EventPublisher(MqttHandler) {
     this.resetLockingStatus = function() {
         MqttHandler.client.publish('voc-to-mqtt/data/lockChangeStatus', 'OFF');
     };
-    this.timeoutForWait = 20000;
+    this.timeoutForWait = 3 * 60 * 1000;
     this.waitedForLock = 0;
-    this.waitForLockToComplete = function(){
+    this.waitForLockToComplete = function(lock){
         self.getDataFromVocExec().then((data) => {
             self.saveCurrentData(data);
-            if(data.carLocked){
+            logger.info('waiting for ' + (lock ? 'lock' : 'unlock') + ' to complete currently: ' + data.carLocked)
+            if(data.carLocked === lock){
                 self.waitedForLockwaited = 0;
                 self.lockingOrUnlocking = false;
+                logger.info((lock ? 'lock' : 'unlock') + ' done!');
                 MqttHandler.client.publish('voc-to-mqtt/data/lockChangeStatus', 'OFF');    
                 this.publishNewData();
             }
             else if(self.timeoutForWait < self.waitedForLock){
+                logger.info((lock ? 'lock' : 'unlock') + ' timed out');
                 self.lockingOrUnlocking = false;
                 MqttHandler.client.publish('voc-to-mqtt/data/lockChangeStatus', 'OFF');    
                 this.publishNewData();
-                
             }
             else{
-                self.waitedForLock = self.waitedForLock + 2000;
-                setTimeout(function(){ self.waitForLockToComplete(); }, 2000);
+                self.waitedForLock = self.waitedForLock + 10000;
+                logger.info((lock ? 'lock' : 'unlock') + ' checking again! waited ' + self.waitedForLock);
+                self.waitedForLock = self.waitedForLock + 10000;
+                setTimeout(function(){ self.waitForLockToComplete(lock); }, 10000);
             }
         });
-        
     };
     this.lockingOrUnlocking = false;
     this.setUpLockingEvent = function () {
@@ -96,10 +99,10 @@ function EventPublisher(MqttHandler) {
                     return self.publishNewData();
                 }).then(()=>{
                     
-                    return self.waitForLockToComplete();
+                    return self.waitForLockToComplete(true);
                 }, ()=>{
                     
-                    return self.waitForLockToComplete();
+                    return self.waitForLockToComplete(true);
                     
                 });
             }
@@ -116,9 +119,9 @@ function EventPublisher(MqttHandler) {
                     
                     
                 }).then(()=>{
-                    return self.waitForLockToComplete();
+                    return self.waitForLockToComplete(false);
                 }, ()=>{
-                    return self.waitForLockToComplete();
+                    return self.waitForLockToComplete(false);
                 });
             }
         });

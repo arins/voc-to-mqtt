@@ -191,31 +191,36 @@ function EventPublisher(MqttHandler) {
                     logger.error('heater off fail!');
                     return self.publishNewData();
                 }).then(()=>{
-                    return self.waitForHeaterToComplete(true);
+                    return self.waitForHeaterToComplete(false);
                 }, ()=>{
-                    return self.waitForHeaterToComplete(true);
+                    return self.waitForHeaterToComplete(false);
                 });
             }
         });
     };
+
+    this.resetHeaterStatus = function() {
+        MqttHandler.client.publish('voc-to-mqtt/data/heaterStatus', 'OFF');
+    };
     this.waitedForheaterToChangeTime = 0;
     this.heaterTimeoutForWait = 3 * 60 * 1000;
-    this.waitForHeaterToComplete = function(heaterOn){
+    this.waitForHeaterToComplete = function(heaterOn, promise){
+      
         self.getDataFromVocExec().then((data) => {
             self.saveCurrentData(data);
-            logger.info('waiting for heater ' + (heaterOn ? 'to start' : 'to shutdown') + ' to complete currently: ' + data.heater.status === 'on')
+            logger.info('waiting for heater ' + (heaterOn ? 'to start' : 'to shutdown') + ' heater status currently: ' + data.heater.status === 'on')
             if(data.heater.status === (heaterOn ? 'on' : 'off')){
                 self.waitedForheaterToChangeTime = 0;
                 self.puttingHeatOnOrOff = false;
                 logger.info((heaterOn ? 'start' : 'to shutdown') + ' done!');
                 MqttHandler.client.publish('voc-to-mqtt/data/heaterStatus', 'OFF');    
-                this.publishNewData();
+                return this.publishNewData();
             }
             else if(self.heaterTimeoutForWait < self.waitedForheaterToChangeTime){
                 logger.info('heater ' + (heaterOn ? 'to start' : 'to shutdown') + ' timed out');
                 self.puttingHeatOnOrOff = false;
                 MqttHandler.client.publish('voc-to-mqtt/data/heaterStatus', 'OFF');    
-                this.publishNewData();
+                return this.publishNewData();
             }
             else{
                 self.waitedForheaterToChangeTime = self.waitedForheaterToChangeTime + 10000;
@@ -331,7 +336,10 @@ function EventPublisher(MqttHandler) {
                     MqttHandler.publish('windows/rearRightWindowOpen', data.windows.rearRightWindowOpen);
                     MqttHandler.publish('windows/frontRightWindowOpen', data.windows.frontRightWindowOpen);
                 }
-
+                
+                if(data.heater){
+                    MqttHandler.publish('heater', data.heater.status === 'on');
+                }
 
                 // more stuff here
 

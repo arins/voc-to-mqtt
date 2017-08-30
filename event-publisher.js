@@ -128,7 +128,7 @@ function EventPublisher(MqttHandler) {
 
     this.lock = function () {
         return new Promise(function (fulfill, reject) {
-            const toExec = paramters.pathToVocApi + ' -g  -u ' + paramters.VOCUsername + ' -p ' + paramters.VOCPassword + ' lock'
+            const toExec = paramters.pathToVocApi + ' -u ' + paramters.VOCUsername + ' -p ' + paramters.VOCPassword + ' lock'
             exec(toExec, function callback(error, stdout, stderr) {
                 if (stderr) {
                     logger.error(stderr);
@@ -142,7 +142,7 @@ function EventPublisher(MqttHandler) {
 
     this.unlock = function () {
         return new Promise(function (fulfill, reject) {
-            const toExec = paramters.pathToVocApi + ' -g  -u ' + paramters.VOCUsername + ' -p ' + paramters.VOCPassword + ' unlock'
+            const toExec = paramters.pathToVocApi + ' -u ' + paramters.VOCUsername + ' -p ' + paramters.VOCPassword + ' unlock'
             exec(toExec, function callback(error, stdout, stderr) {
                 if (stderr) {
                     logger.error(stderr);
@@ -234,7 +234,7 @@ function EventPublisher(MqttHandler) {
 
      this.heaterOn = function () {
         return new Promise(function (fulfill, reject) {
-            const toExec = paramters.pathToVocApi + ' -g  -u ' + paramters.VOCUsername + ' -p ' + paramters.VOCPassword + ' heater start'
+            const toExec = paramters.pathToVocApi + ' -u ' + paramters.VOCUsername + ' -p ' + paramters.VOCPassword + ' heater start'
             exec(toExec, function callback(error, stdout, stderr) {
                 if (stderr) {
                     logger.error(stderr);
@@ -249,7 +249,7 @@ function EventPublisher(MqttHandler) {
 
     this.heaterOff = function () {
         return new Promise(function (fulfill, reject) {
-            const toExec = paramters.pathToVocApi + ' -g  -u ' + paramters.VOCUsername + ' -p ' + paramters.VOCPassword + ' heater stop'
+            const toExec = paramters.pathToVocApi + ' -u ' + paramters.VOCUsername + ' -p ' + paramters.VOCPassword + ' heater stop'
             exec(toExec, function callback(error, stdout, stderr) {
                 if (stderr) {
                     logger.error(stderr);

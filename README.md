@@ -162,3 +162,104 @@ voc-to-mqtt/data/position/location
 ```
 voc-to-mqtt/data/position/speed
 voc-to-mqtt/data/position/heading
+
+
+
+### How to use in OpenHab2 (not tested in OpenHab1 but should work)
+
+```
+/* volvo */
+Number Volvo_xc60_average_fuel_consumption "Average Fuel Consumption" {mqtt="<[mqttserver:voc-to-mqtt/data/averageFuelConsumption:state:JS(toNumber.js)]"}
+Number Volvo_xc60_averageSpeed "Average Speed" {mqtt="<[mqttserver:voc-to-mqtt/data/averageSpeed:state:JS(toNumber.js)]"}
+
+String Volvo_xc60_brakeFluid "Break fluid" {mqtt="<[mqttserver:voc-to-mqtt/data/brakeFluid:state:JS(toString.js)]"}
+Number Volvo_xc60_distanceToEmpty "Distance to Empty" {mqtt="<[mqttserver:voc-to-mqtt/data/distanceToEmpty:state:JS(toNumber.js)]"}
+Number Volvo_xc60_fuelAmount "Fuel Amount" {mqtt="<[mqttserver:voc-to-mqtt/data/fuelAmount:state:JS(toNumber.js)]"}
+Number Volvo_xc60_fuelAmountLevel "Fuel Amount Level" {mqtt="<[mqttserver:voc-to-mqtt/data/fuelAmountLevel:state:JS(toNumber.js)]"}
+Number Volvo_xc60_fuelTankVolume "Fuel Tank Volume" {mqtt="<[mqttserver:voc-to-mqtt/data/fuelTankVolume:state:JS(toNumber.js)]"}
+String Volvo_xc60_fuelType "Fuel Type" {mqtt="<[mqttserver:voc-to-mqtt/data/fuelType:state:JS(toString.js)]"}
+String Volvo_xc60_registrationNumber "Registration Number" {mqtt="<[mqttserver:voc-to-mqtt/data/registrationNumber:state:JS(toString.js)]"}
+String Volvo_xc60_subscriptionEndDate "Subscription End Date" {mqtt="<[mqttserver:voc-to-mqtt/data/subscriptionEndDate:state:JS(toString.js)]"}
+String Volvo_xc60_vehicleType "Vehicle Type" {mqtt="<[mqttserver:voc-to-mqtt/data/vehicleType:state:JS(toString.js)]"}
+
+/*read only  */
+Switch Volvo_xc60_carLocked "Car locked" {mqtt="<[mqttserver:voc-to-mqtt/data/carLocked:state:JS(toString.js)]"}
+// send on or off to enable carlock
+Switch Volvo_xc60_carLock "Lock car" {mqtt=">[mqttserver:voc-to-mqtt/data/carLock:command:OFF:OFF],>[mqttserver:voc-to-mqtt/data/carLock:command:ON:ON]"}
+// on if the car is either unlocking or locking currently (Can be used to disable buttons)
+Switch Volvo_xc60_lockChangeStatus "Lock status" {mqtt="<[mqttserver:voc-to-mqtt/data/lockChangeStatus:state:JS(toString.js)]"}
+
+String Volvo_xc60_washerFluidLevel "Washer Fluid Level" {mqtt="<[mqttserver:voc-to-mqtt/data/washerFluidLevel:state:JS(toString.js)]"}
+Switch Volvo_xc60_engineRunning "Engine running" {mqtt="<[mqttserver:voc-to-mqtt/data/engineRunning:state:JS(toString.js)]"}
+
+//doors
+Switch Volvo_xc60_doors_tailgateOpen "Tail gate open" {mqtt="<[mqttserver:voc-to-mqtt/data/doors/tailgateOpen:state:JS(toString.js)]"}
+Switch Volvo_xc60_doors_rearRightDoorOpen "Rear right door open" {mqtt="<[mqttserver:voc-to-mqtt/data/doors/rearRightDoorOpen:state:JS(toString.js)]"}
+Switch Volvo_xc60_doors_rearLeftDoorOpen "Rear left door open" {mqtt="<[mqttserver:voc-to-mqtt/data/doors/rearLeftDoorOpen:state:JS(toString.js)]"}
+Switch Volvo_xc60_doors_frontRightDoorOpen "Front right door open" {mqtt="<[mqttserver:voc-to-mqtt/data/doors/frontRightDoorOpen:state:JS(toString.js)]"}
+Switch Volvo_xc60_doors_hoodOpen "Hood open" {mqtt="<[mqttserver:voc-to-mqtt/data/doors/hoodOpen:state:JS(toString.js)]"}
+Switch Volvo_xc60_doors_frontLeftDoorOpen "Front left door open" {mqtt="<[mqttserver:voc-to-mqtt/data/doors/frontLeftDoorOpen:state:JS(toString.js)]"}
+
+//calculatedPosition
+Location Volvo_xc60_calculatedPosition_location "location" {mqtt="<[mqttserver:voc-to-mqtt/data/calculatedPosition/location:state:JS(toLocation.js)]"}
+Switch Volvo_xc60_calculatedPosition_speed "speed" {mqtt="<[mqttserver:voc-to-mqtt/data/calculatedPosition/speed:state:JS(toString.js)]"}
+Switch Volvo_xc60_calculatedPosition_heading "heading" {mqtt="<[mqttserver:voc-to-mqtt/data/calculatedPosition/heading:state:JS(toString.js)]"}
+
+//position
+String Volvo_xc60_position_location "location" {mqtt="<[mqttserver:voc-to-mqtt/data/position/location:state:JS(toString.js)]"}
+Switch Volvo_xc60_position_speed "speed" {mqtt="<[mqttserver:voc-to-mqtt/data/position/speed:state:JS(toString.js)]"}
+Switch Volvo_xc60_position_heading "heading" {mqtt="<[mqttserver:voc-to-mqtt/data/position/heading:state:JS(toString.js)]"}
+
+//tyrePressure
+String Volvo_xc60_tyrePressure_frontLeft "tyrePressure frontLeft" {mqtt="<[mqttserver:voc-to-mqtt/data/tyrePressure/frontLeftTyrePressure:state:JS(toString.js)]"}
+String Volvo_xc60_tyrePressure_frontRight "tyrePressure frontRight" {mqtt="<[mqttserver:voc-to-mqtt/data/tyrePressure/frontRightTyrePressure:state:JS(toString.js)]"}
+String Volvo_xc60_tyrePressure_rearLeft "tyrePressure rearLeft" {mqtt="<[mqttserver:voc-to-mqtt/data/tyrePressure/rearLeftTyrePressure:state:JS(toString.js)]"}
+String Volvo_xc60_tyrePressure_rearRight "tyrePressure rearRight" {mqtt="<[mqttserver:voc-to-mqtt/data/tyrePressure/rearRightTyrePressure:state:JS(toString.js)]"}
+
+
+//windows
+Switch Volvo_xc60_windows_frontLeftWindowOpen "window front Left open" {mqtt="<[mqttserver:voc-to-mqtt/data/windows/frontLeftWindowOpen:state:JS(toString.js)]"}
+Switch Volvo_xc60_windows_rearLeftWindowOpen "window rear Left open" {mqtt="<[mqttserver:voc-to-mqtt/data/windows/rearLeftWindowOpen:state:JS(toString.js)]"}
+Switch Volvo_xc60_windows_rearRightWindowOpen "window rear Right open" {mqtt="<[mqttserver:voc-to-mqtt/data/windows/rearRightWindowOpen:state:JS(toString.js)]"}
+Switch Volvo_xc60_windows_frontRightWindowOpen "window front Right open" {mqtt="<[mqttserver:voc-to-mqtt/data/windows/frontRightWindowOpen:state:JS(toString.js)]"}
+
+//heater
+
+// read only
+Switch Volvo_xc60_heaterOn "Heater on/off" {mqtt="<[mqttserver:voc-to-mqtt/data/heater:state:JS(toString.js)]"}
+
+// set the heat on or off
+Switch Volvo_xc60_heater "Heater" {mqtt=">[mqttserver:voc-to-mqtt/data/heat:command:OFF:OFF],>[mqttserver:voc-to-mqtt/data/heat:command:ON:ON]"}
+
+// if heater is current being put on or off
+Switch Volvo_xc60_heaterStatus "Heater status" {mqtt="<[mqttserver:voc-to-mqtt/data/heaterStatus:state:JS(toString.js)]"}
+
+```
+
+toString.js transform
+
+```javascript
+
+(function (i) {
+
+  if(i){
+    return i.toString();
+  }
+  else{
+    return '-';
+  }
+})(input)
+
+```
+
+
+toNumber.js transform
+
+```javascript
+(function (i) {
+  var parsed = parseFloat(i);
+  return parsed;
+})(input)
+
+
+```

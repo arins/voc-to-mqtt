@@ -166,6 +166,12 @@ voc-to-mqtt/data/position/heading
 
 
 ### How to use in OpenHab2 (not tested in OpenHab1 but should work)
+You will need MQTT binding to be able to use this in OpenHab1/2
+Below is an example for OpenHab2 items. Put this in your items files and then you can use the items as you like.
+
+There are two transforms which will be needed they are included further down.
+
+#### Openhab items
 
 ```
 /* volvo */
@@ -184,9 +190,9 @@ String Volvo_xc60_vehicleType "Vehicle Type" {mqtt="<[mqttserver:voc-to-mqtt/dat
 
 /*read only  */
 Switch Volvo_xc60_carLocked "Car locked" {mqtt="<[mqttserver:voc-to-mqtt/data/carLocked:state:JS(toString.js)]"}
-// send on or off to enable carlock
+// send on or off to enable carlock (not implemented yet)
 Switch Volvo_xc60_carLock "Lock car" {mqtt=">[mqttserver:voc-to-mqtt/data/carLock:command:OFF:OFF],>[mqttserver:voc-to-mqtt/data/carLock:command:ON:ON]"}
-// on if the car is either unlocking or locking currently (Can be used to disable buttons)
+// on if the car is either unlocking or locking currently (Can be used to disable buttons) (not implemented yet)
 Switch Volvo_xc60_lockChangeStatus "Lock status" {mqtt="<[mqttserver:voc-to-mqtt/data/lockChangeStatus:state:JS(toString.js)]"}
 
 String Volvo_xc60_washerFluidLevel "Washer Fluid Level" {mqtt="<[mqttserver:voc-to-mqtt/data/washerFluidLevel:state:JS(toString.js)]"}
@@ -228,16 +234,18 @@ Switch Volvo_xc60_windows_frontRightWindowOpen "window front Right open" {mqtt="
 // read only
 Switch Volvo_xc60_heaterOn "Heater on/off" {mqtt="<[mqttserver:voc-to-mqtt/data/heater:state:JS(toString.js)]"}
 
-// set the heat on or off
+// set the heat on or off (not implemented yet)
 Switch Volvo_xc60_heater "Heater" {mqtt=">[mqttserver:voc-to-mqtt/data/heat:command:OFF:OFF],>[mqttserver:voc-to-mqtt/data/heat:command:ON:ON]"}
 
-// if heater is current being put on or off
+// if heater is current being put on or off (not implemented yet)
 Switch Volvo_xc60_heaterStatus "Heater status" {mqtt="<[mqttserver:voc-to-mqtt/data/heaterStatus:state:JS(toString.js)]"}
 
 ```
 
-toString.js transform
+####  transform
+Put these in your transform folder 
 
+toString.js
 ```javascript
 
 (function (i) {
@@ -251,7 +259,6 @@ toString.js transform
 })(input)
 
 ```
-
 
 toNumber.js transform
 

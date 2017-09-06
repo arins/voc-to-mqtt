@@ -1,9 +1,4 @@
 # voc-to-mqtt
-Uses https://github.com/molobrakos/volvooncall to push data to a MQTT server to be used by OpenHab for instance
-Boolean values are pushed as ON or OFF (can be configured so that it pushes true or false)
-
-## What this is
-
 This node application uses https://github.com/molobrakos/volvooncall (CLI) to get information about your volvo and push it to a mqtt server.
 This allows for instance an OpenHab server to use the data to show information about your Volvo.
 
@@ -11,7 +6,7 @@ This allows for instance an OpenHab server to use the data to show information a
 
 this is only tested under ubuntu server 
 
-1. clone this repo to any location you prefer
+1. clone this repo to any location you prefer (/opt/voc-to-mqtt if you plan to use systemd)
 
 ```bash
 git clone https://github.com/arins/voc-to-mqtt.git
